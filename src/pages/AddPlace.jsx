@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Save, ArrowRight, ArrowLeft, Trash2, MapPin, Tag, Globe, CheckCircle2 } from 'lucide-react';
 
 export default function AddPlace() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const category = searchParams.get('category') || 'world';
     const [entries, setEntries] = useState([]);
     const [currentEntry, setCurrentEntry] = useState({ name: '', type: '', place: '' });
     const formRef = useRef(null);
@@ -16,7 +18,7 @@ export default function AddPlace() {
     const handleNext = () => {
         if (!currentEntry.name.trim() && !currentEntry.type.trim() && !currentEntry.place.trim()) return;
 
-        const newEntries = [...entries, currentEntry];
+        const newEntries = [...entries, { ...currentEntry, category }];
         setEntries(newEntries);
 
         // Scroll to bottom after adding
@@ -26,9 +28,9 @@ export default function AddPlace() {
     };
 
     const handleSaveAll = () => {
-        let finalEntries = [...entries];
+        let finalEntries = entries.map(e => ({ ...e, category }));
         if (currentEntry.name.trim() || currentEntry.type.trim() || currentEntry.place.trim()) {
-            finalEntries.push(currentEntry);
+            finalEntries.push({ ...currentEntry, category });
         }
 
         if (finalEntries.length === 0) return;
@@ -37,7 +39,6 @@ export default function AddPlace() {
         const updatedData = [...existingData, ...finalEntries];
         localStorage.setItem('myPlaces', JSON.stringify(updatedData));
 
-        // Could add a toast here in a real app
         navigate('/all-places');
     };
 
@@ -45,10 +46,16 @@ export default function AddPlace() {
         setEntries(entries.filter((_, i) => i !== index));
     };
 
+    const isIndia = category === 'india';
+    const headerColor = isIndia ? 'bg-orange-600' : 'bg-indigo-600';
+    const accentColor = isIndia ? 'bg-orange-600' : 'bg-indigo-600';
+    const accentLight = isIndia ? 'bg-orange-50' : 'bg-indigo-50';
+    const accentText = isIndia ? 'text-orange-700' : 'text-indigo-700';
+
     return (
         <div className="min-h-screen bg-slate-50 pb-32">
             {/* Background */}
-            <div className="absolute top-0 left-0 w-full h-64 bg-indigo-600 z-0"></div>
+            <div className={`absolute top-0 left-0 w-full h-64 ${headerColor} z-0 transition-colors duration-500`}></div>
 
             <div className="relative z-10 max-w-4xl mx-auto px-6 pt-8">
 
@@ -56,10 +63,13 @@ export default function AddPlace() {
                 <div className="flex items-center justify-between mb-8 text-white">
                     <button onClick={() => navigate('/')} className="flex items-center gap-2 hover:bg-white/10 px-4 py-2 rounded-full transition-colors">
                         <ArrowLeft size={18} />
-                        <span className="font-medium">Back to Home</span>
+                        <span className="font-medium">Back</span>
                     </button>
-                    <h1 className="text-3xl font-bold tracking-tight">Add New Places</h1>
-                    <div className="w-24"></div> {/* Spacer for center alignment */}
+                    <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+                        {isIndia ? '🇮🇳 India' : <Globe size={28} />}
+                        Add New {isIndia ? 'India' : 'World'} Places
+                    </h1>
+                    <div className="w-12"></div>
                 </div>
 
                 <div className="space-y-6">
