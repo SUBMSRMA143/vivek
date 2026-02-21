@@ -4,48 +4,6 @@ import { PlusCircle, PlayCircle, Bookmark, MapPin, Globe, ArrowLeft } from 'luci
 
 export default function Home() {
     const navigate = useNavigate();
-    const [showAddSelection, setShowAddSelection] = useState(false);
-
-    if (showAddSelection) {
-        return (
-            <div className="min-h-screen bg-slate-50 relative overflow-hidden flex items-center justify-center">
-                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] z-0"></div>
-
-                <div className="relative z-10 container mx-auto px-6 flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-300">
-                    <button
-                        onClick={() => setShowAddSelection(false)}
-                        className="mb-8 flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors group"
-                    >
-                        <ArrowLeft size={20} /> <span className="font-medium">Back to Menu</span>
-                    </button>
-
-                    <h2 className="text-4xl font-black text-slate-900 mb-12 tracking-tight">Select <span className="text-indigo-600">Region</span></h2>
-
-                    <div className="flex flex-col gap-6 w-full max-w-sm">
-                        <button
-                            onClick={() => navigate('/add?category=world')}
-                            className="w-full py-8 bg-white border-2 border-slate-100 rounded-3xl shadow-xl hover:border-indigo-500 hover:shadow-indigo-100 transition-all text-2xl font-bold text-slate-800 flex flex-col items-center justify-center gap-4 group"
-                        >
-                            <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-500 group-hover:scale-110 transition-transform">
-                                <Globe size={32} />
-                            </div>
-                            All World
-                        </button>
-
-                        <button
-                            onClick={() => navigate('/add?category=india')}
-                            className="w-full py-8 bg-white border-2 border-slate-100 rounded-3xl shadow-xl hover:border-orange-500 hover:shadow-orange-100 transition-all text-2xl font-bold text-slate-800 flex flex-col items-center justify-center gap-4 group"
-                        >
-                            <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-500 group-hover:scale-110 transition-transform text-3xl">
-                                🇮🇳
-                            </div>
-                            India
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="min-h-screen bg-slate-50 relative overflow-hidden flex items-center justify-center">
@@ -66,24 +24,15 @@ export default function Home() {
                     </p>
                 </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-6xl">
-                    <MenuCard
-                        title="Add New"
-                        description="Log a new landmark."
-                        icon={<PlusCircle size={32} />}
-                        onClick={() => setShowAddSelection(true)}
-                        colorClass="text-blue-600 bg-blue-50"
-                        hoverClass="hover:border-blue-200 hover:shadow-blue-100"
-                        delay="delay-0"
-                    />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
                     <MenuCard
                         title="All Places"
-                        description="Browse your collection."
+                        description="Browse the full collection."
                         icon={<Globe size={32} />}
                         onClick={() => navigate('/all-places')}
                         colorClass="text-indigo-600 bg-indigo-50"
                         hoverClass="hover:border-indigo-200 hover:shadow-indigo-100"
-                        delay="delay-75"
+                        delay="delay-0"
                     />
                     <MenuCard
                         title="Start Quiz"
@@ -92,7 +41,7 @@ export default function Home() {
                         onClick={() => navigate('/quiz')}
                         colorClass="text-emerald-600 bg-emerald-50"
                         hoverClass="hover:border-emerald-200 hover:shadow-emerald-100"
-                        delay="delay-150"
+                        delay="delay-75"
                     />
                     <MenuCard
                         title="Bookmarks"
@@ -101,7 +50,7 @@ export default function Home() {
                         onClick={() => navigate('/bookmarks')}
                         colorClass="text-purple-600 bg-purple-50"
                         hoverClass="hover:border-purple-200 hover:shadow-purple-100"
-                        delay="delay-225"
+                        delay="delay-150"
                     />
                 </div>
 
