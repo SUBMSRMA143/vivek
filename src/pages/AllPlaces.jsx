@@ -145,34 +145,34 @@ export default function AllPlaces() {
                         </p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="flex flex-col gap-4">
                         {filteredPlaces.map((place, index) => (
                             <div
                                 key={index}
-                                className="bg-white p-7 rounded-3xl shadow-md border border-slate-100 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 group relative overflow-hidden animate-in slide-in-from-bottom-4 duration-500"
+                                className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 group flex flex-col md:flex-row md:items-center justify-between gap-6 animate-in slide-in-from-bottom-2 duration-500"
                             >
-                                <div className="flex items-center gap-3 absolute top-6 right-6">
-                                    <button
-                                        onClick={() => toggleBookmark(place.id)}
-                                        className={`p-2 rounded-xl transition-all shadow-sm border ${place.isBookmarked
-                                            ? 'bg-amber-100 border-amber-200 text-amber-600'
-                                            : 'bg-white border-slate-100 text-slate-300 hover:text-amber-500'
-                                            }`}
-                                        title={place.isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
-                                    >
-                                        <Star size={18} fill={place.isBookmarked ? "currentColor" : "none"} />
-                                    </button>
+                                {/* Left: Info */}
+                                <div className="flex-1 min-w-[200px]">
+                                    <div className="flex items-center gap-3 mb-1">
+                                        <h3 className="text-xl font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">
+                                            {place.name}
+                                        </h3>
+                                        <div className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter ${place.category === 'india'
+                                            ? 'bg-orange-50 text-orange-600 border border-orange-100'
+                                            : 'bg-indigo-50 text-indigo-600 border border-indigo-100'
+                                            }`}>
+                                            {place.category === 'india' ? 'India' : 'World'}
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-slate-400">
+                                        <MapPin size={14} />
+                                        <span className="text-xs font-semibold">{place.place}</span>
+                                    </div>
                                 </div>
 
-                                <div className={`inline-block px-3 py-1 mb-4 rounded-lg text-[10px] font-black uppercase tracking-widest ${place.category === 'india'
-                                    ? 'bg-orange-50 text-orange-600'
-                                    : 'bg-indigo-50 text-indigo-600'
-                                    }`}>
-                                    {place.category === 'india' ? '🇮🇳 India' : '🌍 World'}
-                                </div>
-
-                                <div className="flex items-center gap-2 mb-4">
-                                    <span className="px-3 py-1 bg-slate-50 text-slate-600 text-[10px] font-black rounded-lg uppercase tracking-wider border border-slate-100">
+                                {/* Middle: Badges */}
+                                <div className="flex flex-wrap items-center gap-2 md:justify-center flex-1">
+                                    <span className="px-3 py-1 bg-slate-50 text-slate-500 text-[10px] font-black rounded-lg uppercase tracking-wider border border-slate-100">
                                         {place.type}
                                     </span>
                                     {place.subtype && (
@@ -182,35 +182,39 @@ export default function AllPlaces() {
                                     )}
                                 </div>
 
-                                <h3 className="text-2xl font-extrabold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors">
-                                    {place.name}
-                                </h3>
-
-                                <div className="flex items-center gap-2 text-slate-500 mb-6 bg-slate-50/50 p-2 rounded-xl border border-slate-100/50 inline-flex">
-                                    <MapPin size={16} className="text-slate-400" />
-                                    <span className="text-sm font-bold">{place.place}</span>
-                                </div>
-
-                                <div className="border-t border-slate-50 pt-5 mt-auto flex justify-between items-center">
-                                    <div className="flex gap-2">
+                                {/* Right: Actions */}
+                                <div className="flex items-center gap-4 shrink-0">
+                                    <div className="flex items-center bg-slate-50 p-1 rounded-xl border border-slate-100">
+                                        <button
+                                            onClick={() => toggleBookmark(place.id)}
+                                            className={`p-2 rounded-lg transition-all ${place.isBookmarked
+                                                ? 'text-amber-500 bg-white shadow-sm'
+                                                : 'text-slate-300 hover:text-amber-500 hover:bg-white'
+                                                }`}
+                                            title={place.isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
+                                        >
+                                            <Star size={18} fill={place.isBookmarked ? "currentColor" : "none"} />
+                                        </button>
+                                        <div className="w-[1px] h-4 bg-slate-200 mx-1"></div>
                                         <button
                                             onClick={() => startEditing(place)}
-                                            className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
+                                            className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-white rounded-lg transition-all"
                                             title="Edit"
                                         >
-                                            <Edit2 size={16} />
+                                            <Edit2 size={18} />
                                         </button>
                                         <button
                                             onClick={() => deletePlace(place.id)}
-                                            className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                                            className="p-2 text-slate-400 hover:text-red-500 hover:bg-white rounded-lg transition-all"
                                             title="Delete"
                                         >
-                                            <Trash2 size={16} />
+                                            <Trash2 size={18} />
                                         </button>
                                     </div>
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
-                                        <Globe size={12} /> ID: {place.id}
-                                    </span>
+                                    <div className="hidden lg:block text-right min-w-[60px]">
+                                        <p className="text-[10px] font-black text-slate-300 uppercase leading-none">ID</p>
+                                        <p className="text-sm font-black text-slate-400">{place.id}</p>
+                                    </div>
                                 </div>
                             </div>
                         ))}

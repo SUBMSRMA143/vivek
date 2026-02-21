@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, MapPin, Globe } from 'lucide-react';
+import { ArrowLeft, Star, MapPin } from 'lucide-react';
 
 export default function Bookmarks() {
     const navigate = useNavigate();
@@ -61,31 +61,34 @@ export default function Bookmarks() {
                         </button>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="flex flex-col gap-4">
                         {bookmarks.map((place) => (
                             <div
                                 key={place.id}
-                                className="bg-white p-7 rounded-3xl shadow-md border border-slate-100 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 group relative overflow-hidden animate-in slide-in-from-bottom-4 duration-500"
+                                className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 group flex flex-col md:flex-row md:items-center justify-between gap-6 animate-in slide-in-from-bottom-2 duration-500"
                             >
-                                <div className="flex items-center gap-3 absolute top-6 right-6">
-                                    <button
-                                        onClick={() => removeBookmark(place.id)}
-                                        className="p-2 rounded-xl bg-amber-100 border border-amber-200 text-amber-600 transition-all shadow-sm"
-                                        title="Remove Bookmark"
-                                    >
-                                        <Star size={18} fill="currentColor" />
-                                    </button>
+                                {/* Left: Info */}
+                                <div className="flex-1 min-w-[200px]">
+                                    <div className="flex items-center gap-3 mb-1">
+                                        <h3 className="text-xl font-bold text-slate-800 group-hover:text-purple-600 transition-colors">
+                                            {place.name}
+                                        </h3>
+                                        <div className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter ${place.category === 'india'
+                                            ? 'bg-orange-50 text-orange-600 border border-orange-100'
+                                            : 'bg-indigo-50 text-indigo-600 border border-indigo-100'
+                                            }`}>
+                                            {place.category === 'india' ? 'India' : 'World'}
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-slate-400">
+                                        <MapPin size={14} />
+                                        <span className="text-xs font-semibold">{place.place}</span>
+                                    </div>
                                 </div>
 
-                                <div className={`inline-block px-3 py-1 mb-4 rounded-lg text-[10px] font-black uppercase tracking-widest ${place.category === 'india'
-                                    ? 'bg-orange-50 text-orange-600'
-                                    : 'bg-indigo-50 text-indigo-600'
-                                    }`}>
-                                    {place.category === 'india' ? '🇮🇳 India' : '🌍 World'}
-                                </div>
-
-                                <div className="flex items-center gap-2 mb-4">
-                                    <span className="px-3 py-1 bg-slate-50 text-slate-600 text-[10px] font-black rounded-lg uppercase tracking-wider border border-slate-100">
+                                {/* Middle: Badges */}
+                                <div className="flex flex-wrap items-center gap-2 md:justify-center flex-1">
+                                    <span className="px-3 py-1 bg-slate-50 text-slate-500 text-[10px] font-black rounded-lg uppercase tracking-wider border border-slate-100">
                                         {place.type}
                                     </span>
                                     {place.subtype && (
@@ -95,19 +98,19 @@ export default function Bookmarks() {
                                     )}
                                 </div>
 
-                                <h3 className="text-2xl font-extrabold text-slate-800 mb-2 group-hover:text-purple-600 transition-colors">
-                                    {place.name}
-                                </h3>
-
-                                <div className="flex items-center gap-2 text-slate-500 mb-6 bg-slate-50/50 p-2 rounded-xl border border-slate-100/50 inline-flex">
-                                    <MapPin size={16} className="text-slate-400" />
-                                    <span className="text-sm font-bold">{place.place}</span>
-                                </div>
-
-                                <div className="border-t border-slate-50 pt-5 mt-auto flex justify-end items-center">
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
-                                        <Globe size={12} /> ID: {place.id}
-                                    </span>
+                                {/* Right: Actions */}
+                                <div className="flex items-center gap-6 shrink-0">
+                                    <button
+                                        onClick={() => removeBookmark(place.id)}
+                                        className="p-3 rounded-xl bg-amber-50 text-amber-500 border border-amber-100 hover:bg-amber-100 transition-all shadow-sm"
+                                        title="Remove Bookmark"
+                                    >
+                                        <Star size={20} fill="currentColor" />
+                                    </button>
+                                    <div className="hidden lg:block text-right min-w-[60px]">
+                                        <p className="text-[10px] font-black text-slate-300 uppercase leading-none">ID</p>
+                                        <p className="text-sm font-black text-slate-400">{place.id}</p>
+                                    </div>
                                 </div>
                             </div>
                         ))}
