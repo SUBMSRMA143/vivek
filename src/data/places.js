@@ -110,5 +110,21 @@ export const PLACES_DATA = [
         subtype: "Volcano",
         place: "Tanzania",
         category: "world"
+    },
+    {
+        id: 15,
+        name: "Special Site A",
+        type: "Special",
+        subtype: "Custom-1",
+        place: "Location-1",
+        category: "special-1"
+    },
+    {
+        id: 16,
+        name: "Special Site B",
+        type: "Special",
+        subtype: "Custom-2",
+        place: "Location-2",
+        category: "special-2"
     }
 ];

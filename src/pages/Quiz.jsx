@@ -143,7 +143,7 @@ export default function Quiz() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mb-12">
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 w-full mb-12">
                     <QuizCategoryCard
                         title="India"
                         icon="🇮🇳"
@@ -157,6 +157,20 @@ export default function Quiz() {
                         count={localPlaces.filter(p => p.category === 'world').length}
                         onClick={() => startQuiz('world')}
                         accent="indigo"
+                    />
+                    <QuizCategoryCard
+                        title="Special-1"
+                        icon="🌟"
+                        count={localPlaces.filter(p => p.category === 'special-1').length}
+                        onClick={() => startQuiz('special-1')}
+                        accent="purple"
+                    />
+                    <QuizCategoryCard
+                        title="Special-2"
+                        icon="✨"
+                        count={localPlaces.filter(p => p.category === 'special-2').length}
+                        onClick={() => startQuiz('special-2')}
+                        accent="orange"
                     />
                     <QuizCategoryCard
                         title="Mixed"

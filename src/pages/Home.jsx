@@ -54,6 +54,36 @@ export default function Home() {
                     />
                 </div>
 
+                <div className="mt-16 w-full max-w-5xl animate-in slide-in-from-bottom-10 duration-700 delay-300">
+                    <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-8">Specialized Curations</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <button
+                            onClick={() => navigate('/all-places?category=special-1')}
+                            className="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white shadow-lg hover:shadow-xl transition-all group flex items-center gap-6 text-left"
+                        >
+                            <div className="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform">
+                                <span className="text-2xl font-black">🌟</span>
+                            </div>
+                            <div>
+                                <h3 className="font-black text-slate-800 tracking-tight">Special-1 Collection</h3>
+                                <p className="text-xs text-slate-500 font-medium tracking-wide">Explore your primary curated set</p>
+                            </div>
+                        </button>
+                        <button
+                            onClick={() => navigate('/all-places?category=special-2')}
+                            className="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white shadow-lg hover:shadow-xl transition-all group flex items-center gap-6 text-left"
+                        >
+                            <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600 group-hover:scale-110 transition-transform">
+                                <span className="text-2xl font-black">✨</span>
+                            </div>
+                            <div>
+                                <h3 className="font-black text-slate-800 tracking-tight">Special-2 Collection</h3>
+                                <p className="text-xs text-slate-500 font-medium tracking-wide">Browse your secondary curated set</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
                 <footer className="mt-20 text-center text-slate-400 text-sm animate-in fade-in duration-1000 delay-500">
                     <p className="font-medium tracking-wide">© 2026 Place Learner • Keep exploring</p>
                 </footer>
