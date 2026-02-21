@@ -10,6 +10,7 @@ export default function Quiz() {
     const [quizState, setQuizState] = useState('intro'); // intro, playing, finished
     const [questionPlaces, setQuestionPlaces] = useState([]);
     const [quizCategory, setQuizCategory] = useState('all'); // all, india, world
+    const [geoFilter, setGeoFilter] = useState('all'); // all, mountain, water, plains, deserts, lakes, rivers
     const [userResults, setUserResults] = useState([]); // Store { name, status: 'known' | 'unknown' }
     const [localPlaces, setLocalPlaces] = useState([]);
 
@@ -31,12 +32,31 @@ export default function Quiz() {
         setQuizCategory(category);
 
         let filtered = [...localPlaces];
+
+        // 1. Regional Filter
         if (category !== 'all') {
-            filtered = localPlaces.filter(p => p.category === category);
+            filtered = filtered.filter(p => p.category === category);
+        }
+
+        // 2. Geography Filter
+        if (geoFilter !== 'all') {
+            if (geoFilter === 'water bodies') {
+                filtered = filtered.filter(p => p.type === 'Water Body');
+            } else if (geoFilter === 'lakes only') {
+                filtered = filtered.filter(p => p.subtype === 'Lake');
+            } else if (geoFilter === 'rivers only') {
+                filtered = filtered.filter(p => p.subtype === 'River');
+            } else if (geoFilter === 'mountain') {
+                filtered = filtered.filter(p => p.type === 'Mountain');
+            } else if (geoFilter === 'plains') {
+                filtered = filtered.filter(p => p.type === 'Plains');
+            } else if (geoFilter === 'deserts') {
+                filtered = filtered.filter(p => p.type === 'Desert');
+            }
         }
 
         if (filtered.length === 0) {
-            alert(`No places found in the ${category} category!`);
+            alert(`No places found matching your selection! Try a different combination.`);
             return;
         }
 
@@ -96,9 +116,32 @@ export default function Quiz() {
                 <h1 className="text-5xl font-black text-slate-900 mb-6 tracking-tight">
                     Place <span className="text-indigo-600">Flashcards</span>
                 </h1>
-                <p className="text-lg text-slate-600 mb-12 font-medium leading-relaxed">
-                    Test your knowledge! Select a region and see how many landmark locations you can correctly identify.
+                <p className="text-lg text-slate-600 mb-10 font-medium leading-relaxed">
+                    Test your knowledge! Pick a physical feature and a region to start your review.
                 </p>
+
+                {/* Geography Dropdown */}
+                <div className="max-w-xs mx-auto mb-8">
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Filter by Terrain</label>
+                    <div className="relative">
+                        <select
+                            value={geoFilter}
+                            onChange={(e) => setGeoFilter(e.target.value)}
+                            className="w-full px-6 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 transition-all font-bold text-slate-800 appearance-none shadow-sm cursor-pointer"
+                        >
+                            <option value="all">All Terrains</option>
+                            <option value="mountain">Mountains</option>
+                            <option value="water bodies">Water Bodies (All)</option>
+                            <option value="plains">Plains</option>
+                            <option value="deserts">Deserts</option>
+                            <option value="lakes only">Lakes Only</option>
+                            <option value="rivers only">Rivers Only</option>
+                        </select>
+                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                            <Globe size={18} />
+                        </div>
+                    </div>
+                </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mb-12">
                     <QuizCategoryCard
