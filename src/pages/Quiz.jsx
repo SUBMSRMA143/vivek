@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Tag, MapPin, Globe, Award, CheckCircle2, HelpCircle, PlayCircle } from 'lucide-react';
+import { ArrowLeft, Tag, MapPin, Globe, Award, CheckCircle2, HelpCircle, PlayCircle, Star } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { PLACES_DATA } from '../data/places';
 
@@ -35,7 +35,9 @@ export default function Quiz() {
         let filtered = [...localPlaces];
 
         // 1. Regional Filter
-        if (category !== 'all') {
+        if (category === 'bookmarks') {
+            filtered = filtered.filter(p => p.isBookmarked);
+        } else if (category !== 'all') {
             filtered = filtered.filter(p => p.category === category);
         }
 
@@ -77,6 +79,19 @@ export default function Quiz() {
         } else {
             startQuiz(category);
         }
+    };
+
+    const toggleBookmark = (id) => {
+        setLocalPlaces(prev => {
+            const updated = prev.map(p => p.id === id ? { ...p, isBookmarked: !p.isBookmarked } : p);
+            localStorage.setItem('myPlaces', JSON.stringify(updated));
+
+            // If we are currently in a quiz, we need to update the questionPlaces as well
+            // so the current card reflects the change immediately
+            setQuestionPlaces(qPrev => qPrev.map(p => p.id === id ? { ...p, isBookmarked: !p.isBookmarked } : p));
+
+            return updated;
+        });
     };
 
     const resetQuestionState = () => {
@@ -170,7 +185,7 @@ export default function Quiz() {
                         </div>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 w-full mb-12 animate-in fade-in duration-500">
+                    <div className="grid grid-cols-2 sm:grid-cols-6 gap-4 w-full mb-12 animate-in fade-in duration-500">
                         <QuizCategoryCard
                             title="India"
                             icon="🇮🇳"
@@ -185,6 +200,15 @@ export default function Quiz() {
                             onClick={() => handleCategoryClick('world')}
                             accent="indigo"
                         />
+                        {localPlaces.some(p => p.isBookmarked) && (
+                            <QuizCategoryCard
+                                title="Bookmarks"
+                                icon="⭐"
+                                count={localPlaces.filter(p => p.isBookmarked).length}
+                                onClick={() => handleCategoryClick('bookmarks')}
+                                accent="amber"
+                            />
+                        )}
                         <QuizCategoryCard
                             title="Special-1"
                             icon="🌟"
@@ -242,8 +266,19 @@ export default function Quiz() {
                     </div>
                 </div>
 
-                <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center font-black text-indigo-600">
-                    ID:{currentPlace.id}
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => toggleBookmark(currentPlace.id)}
+                        className={`p-3 rounded-xl transition-all ${currentPlace.isBookmarked
+                            ? 'bg-amber-50 text-amber-500 shadow-sm'
+                            : 'text-slate-300 hover:text-slate-400'}`}
+                        title={currentPlace.isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
+                    >
+                        <Star size={24} fill={currentPlace.isBookmarked ? "currentColor" : "none"} />
+                    </button>
+                    <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center font-black text-indigo-600">
+                        ID:{currentPlace.id}
+                    </div>
                 </div>
             </header>
 
@@ -392,6 +427,8 @@ function QuizCategoryCard({ title, icon, count, onClick, accent }) {
     const accents = {
         orange: 'hover:border-orange-200 hover:shadow-orange-100/50 text-orange-600 bg-orange-50/50',
         indigo: 'hover:border-indigo-200 hover:shadow-indigo-100/50 text-indigo-600 bg-indigo-50/50',
+        amber: 'hover:border-amber-200 hover:shadow-amber-100/50 text-amber-600 bg-amber-50/50',
+        purple: 'hover:border-purple-200 hover:shadow-purple-100/50 text-purple-600 bg-purple-50/50',
         slate: 'hover:border-slate-200 hover:shadow-slate-100/50 text-slate-600 bg-slate-50/50'
     };
 
