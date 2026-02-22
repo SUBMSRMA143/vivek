@@ -12,22 +12,22 @@ export default function AllPlaces() {
 
     useEffect(() => {
         const saved = JSON.parse(localStorage.getItem('myPlaces') || '[]');
-        if (saved.length === 0) {
-            // Initial load from static data
-            const initialData = PLACES_DATA.map(p => ({ ...p, isBookmarked: false }));
-            setPlaces(initialData);
-            localStorage.setItem('myPlaces', JSON.stringify(initialData));
-        } else {
-            // Migration: ensure new fields from static data are present if they exist there
-            const migrated = saved.map(p => {
-                const staticMatch = PLACES_DATA.find(s => s.id === p.id);
-                return {
-                    ...p,
-                    subtype: p.subtype || (staticMatch ? staticMatch.subtype : '')
-                };
-            });
-            setPlaces(migrated);
-        }
+
+        // Sync static PLACES_DATA with local storage
+        const syncedData = PLACES_DATA.map(staticPlace => {
+            const savedPlace = saved.find(p => p.id === staticPlace.id);
+            return {
+                ...staticPlace,
+                isBookmarked: savedPlace ? savedPlace.isBookmarked : false
+            };
+        });
+
+        const staticIds = new Set(PLACES_DATA.map(p => p.id));
+        const customPlaces = saved.filter(p => !staticIds.has(p.id));
+        const finalData = [...syncedData, ...customPlaces];
+
+        setPlaces(finalData);
+        localStorage.setItem('myPlaces', JSON.stringify(finalData));
     }, []);
 
     const savePlaces = (updatedPlaces) => {

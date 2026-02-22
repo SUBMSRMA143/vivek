@@ -20,13 +20,24 @@ export default function Quiz() {
 
     useEffect(() => {
         const saved = JSON.parse(localStorage.getItem('myPlaces') || '[]');
-        if (saved.length === 0) {
-            const initialData = PLACES_DATA.map(p => ({ ...p, isBookmarked: false }));
-            setLocalPlaces(initialData);
-            localStorage.setItem('myPlaces', JSON.stringify(initialData));
-        } else {
-            setLocalPlaces(saved);
-        }
+
+        // Sync static PLACES_DATA with local storage
+        const syncedData = PLACES_DATA.map(staticPlace => {
+            const savedPlace = saved.find(p => p.id === staticPlace.id);
+            return {
+                ...staticPlace,
+                isBookmarked: savedPlace ? savedPlace.isBookmarked : false
+            };
+        });
+
+        // Also preserve any custom places that might have been added but aren't in PLACES_DATA
+        // (though current UI doesn't allow adding, this makes it robust)
+        const staticIds = new Set(PLACES_DATA.map(p => p.id));
+        const customPlaces = saved.filter(p => !staticIds.has(p.id));
+        const finalData = [...syncedData, ...customPlaces];
+
+        setLocalPlaces(finalData);
+        localStorage.setItem('myPlaces', JSON.stringify(finalData));
     }, []);
 
     const startQuiz = (category = 'all') => {
