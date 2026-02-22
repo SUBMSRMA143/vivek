@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Tag, MapPin, Globe, Award, CheckCircle2, HelpCircle } from 'lucide-react';
+import { ArrowLeft, Tag, MapPin, Globe, Award, CheckCircle2, HelpCircle, PlayCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { PLACES_DATA } from '../data/places';
 
@@ -11,6 +11,7 @@ export default function Quiz() {
     const [questionPlaces, setQuestionPlaces] = useState([]);
     const [quizCategory, setQuizCategory] = useState('all'); // all, india, world
     const [geoFilter, setGeoFilter] = useState('all'); // all, mountain, water, plains, deserts, lakes, rivers
+    const [selectedCategory, setSelectedCategory] = useState(null); // For two-step selection
     const [userResults, setUserResults] = useState([]); // Store { name, status: 'known' | 'unknown' }
     const [localPlaces, setLocalPlaces] = useState([]);
 
@@ -70,6 +71,14 @@ export default function Quiz() {
         resetQuestionState();
     };
 
+    const handleCategoryClick = (category) => {
+        if (category === 'india' || category === 'world') {
+            setSelectedCategory(category);
+        } else {
+            startQuiz(category);
+        }
+    };
+
     const resetQuestionState = () => {
         setHints({ type: false, subtype: false, location: false });
     };
@@ -117,69 +126,88 @@ export default function Quiz() {
                     Place <span className="text-indigo-600">Flashcards</span>
                 </h1>
                 <p className="text-lg text-slate-600 mb-10 font-medium leading-relaxed">
-                    Test your knowledge! Pick a physical feature and a region to start your review.
+                    Test your knowledge! {selectedCategory ? `Customize your ${selectedCategory} review.` : 'Pick a region to start your review.'}
                 </p>
 
-                {/* Geography Dropdown */}
-                <div className="max-w-xs mx-auto mb-8">
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Filter by Terrain</label>
-                    <div className="relative">
-                        <select
-                            value={geoFilter}
-                            onChange={(e) => setGeoFilter(e.target.value)}
-                            className="w-full px-6 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 transition-all font-bold text-slate-800 appearance-none shadow-sm cursor-pointer"
-                        >
-                            <option value="all">All Terrains</option>
-                            <option value="mountain">Mountains</option>
-                            <option value="water bodies">Water Bodies (All)</option>
-                            <option value="plains">Plains</option>
-                            <option value="deserts">Deserts</option>
-                            <option value="lakes only">Lakes Only</option>
-                            <option value="rivers only">Rivers Only</option>
-                        </select>
-                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                            <Globe size={18} />
+                {selectedCategory ? (
+                    <div className="animate-in slide-in-from-bottom-4 duration-500">
+                        {/* Geography Dropdown */}
+                        <div className="max-w-xs mx-auto mb-8">
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Filter by Terrain</label>
+                            <div className="relative">
+                                <select
+                                    value={geoFilter}
+                                    onChange={(e) => setGeoFilter(e.target.value)}
+                                    className="w-full px-6 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 transition-all font-bold text-slate-800 appearance-none shadow-sm cursor-pointer"
+                                >
+                                    <option value="all">All Terrains</option>
+                                    <option value="mountain">Mountains</option>
+                                    <option value="water bodies">Water Bodies (All)</option>
+                                    <option value="plains">Plains</option>
+                                    <option value="deserts">Deserts</option>
+                                    <option value="lakes only">Lakes Only</option>
+                                    <option value="rivers only">Rivers Only</option>
+                                </select>
+                                <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                                    <Globe size={18} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-4 mb-12 max-w-xs mx-auto">
+                            <button
+                                onClick={() => startQuiz(selectedCategory)}
+                                className="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-1 transition-all flex items-center justify-center gap-3 uppercase tracking-wider"
+                            >
+                                <PlayCircle size={24} /> Start {selectedCategory} Quiz
+                            </button>
+                            <button
+                                onClick={() => setSelectedCategory(null)}
+                                className="text-slate-400 font-bold hover:text-slate-600 transition-colors py-2"
+                            >
+                                ← Switch Category
+                            </button>
                         </div>
                     </div>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 w-full mb-12">
-                    <QuizCategoryCard
-                        title="India"
-                        icon="🇮🇳"
-                        count={localPlaces.filter(p => p.category === 'india').length}
-                        onClick={() => startQuiz('india')}
-                        accent="orange"
-                    />
-                    <QuizCategoryCard
-                        title="World"
-                        icon="🌍"
-                        count={localPlaces.filter(p => p.category === 'world').length}
-                        onClick={() => startQuiz('world')}
-                        accent="indigo"
-                    />
-                    <QuizCategoryCard
-                        title="Special-1"
-                        icon="🌟"
-                        count={localPlaces.filter(p => p.category === 'special-1').length}
-                        onClick={() => startQuiz('special-1')}
-                        accent="purple"
-                    />
-                    <QuizCategoryCard
-                        title="Special-2"
-                        icon="✨"
-                        count={localPlaces.filter(p => p.category === 'special-2').length}
-                        onClick={() => startQuiz('special-2')}
-                        accent="orange"
-                    />
-                    <QuizCategoryCard
-                        title="Mixed"
-                        icon="🎭"
-                        count={localPlaces.length}
-                        onClick={() => startQuiz('all')}
-                        accent="slate"
-                    />
-                </div>
+                ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 w-full mb-12 animate-in fade-in duration-500">
+                        <QuizCategoryCard
+                            title="India"
+                            icon="🇮🇳"
+                            count={localPlaces.filter(p => p.category === 'india').length}
+                            onClick={() => handleCategoryClick('india')}
+                            accent="orange"
+                        />
+                        <QuizCategoryCard
+                            title="World"
+                            icon="🌍"
+                            count={localPlaces.filter(p => p.category === 'world').length}
+                            onClick={() => handleCategoryClick('world')}
+                            accent="indigo"
+                        />
+                        <QuizCategoryCard
+                            title="Special-1"
+                            icon="🌟"
+                            count={localPlaces.filter(p => p.category === 'special-1').length}
+                            onClick={() => handleCategoryClick('special-1')}
+                            accent="purple"
+                        />
+                        <QuizCategoryCard
+                            title="Special-2"
+                            icon="✨"
+                            count={localPlaces.filter(p => p.category === 'special-2').length}
+                            onClick={() => handleCategoryClick('special-2')}
+                            accent="orange"
+                        />
+                        <QuizCategoryCard
+                            title="Mixed"
+                            icon="🎭"
+                            count={localPlaces.length}
+                            onClick={() => handleCategoryClick('all')}
+                            accent="slate"
+                        />
+                    </div>
+                )}
 
                 <button
                     onClick={() => navigate('/')}
@@ -196,7 +224,10 @@ export default function Quiz() {
             {/* Progress HUD */}
             <header className="w-full max-w-2xl mb-12 flex items-center justify-between bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50">
                 <button
-                    onClick={() => setQuizState('intro')}
+                    onClick={() => {
+                        setQuizState('intro');
+                        setSelectedCategory(null);
+                    }}
                     className="p-3 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all"
                 >
                     <ArrowLeft size={24} />
@@ -335,7 +366,10 @@ export default function Quiz() {
 
                 <div className="flex flex-col sm:flex-row gap-4">
                     <button
-                        onClick={() => setQuizState('intro')}
+                        onClick={() => {
+                            setQuizState('intro');
+                            setSelectedCategory(null);
+                        }}
                         className="flex-1 py-5 bg-slate-100 text-slate-600 rounded-2xl font-black hover:bg-slate-200 transition-all flex items-center justify-center gap-3"
                     >
                         <ArrowLeft size={20} /> TRY ANOTHER REGION
