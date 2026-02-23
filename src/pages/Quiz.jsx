@@ -52,20 +52,26 @@ export default function Quiz() {
             filtered = filtered.filter(p => p.category === category);
         }
 
-        // 2. Geography Filter
+        // 2. Geography/Continent Filter
         if (geoFilter !== 'all') {
-            if (geoFilter === 'water bodies') {
-                filtered = filtered.filter(p => p.type === 'Water Body');
-            } else if (geoFilter === 'lakes only') {
-                filtered = filtered.filter(p => p.subtype === 'Lake');
-            } else if (geoFilter === 'rivers only') {
-                filtered = filtered.filter(p => p.subtype === 'River');
-            } else if (geoFilter === 'mountain') {
-                filtered = filtered.filter(p => p.type === 'Mountain');
-            } else if (geoFilter === 'plains') {
-                filtered = filtered.filter(p => p.type === 'Plains');
-            } else if (geoFilter === 'deserts') {
-                filtered = filtered.filter(p => p.type === 'Desert');
+            if (category === 'world') {
+                // For world, geoFilter contains the continent name
+                filtered = filtered.filter(p => p.place === geoFilter);
+            } else {
+                // For other categories (like India), use the terrain filters
+                if (geoFilter === 'water bodies') {
+                    filtered = filtered.filter(p => p.type === 'Water Body');
+                } else if (geoFilter === 'lakes only') {
+                    filtered = filtered.filter(p => p.subtype === 'Lake');
+                } else if (geoFilter === 'rivers only') {
+                    filtered = filtered.filter(p => p.subtype === 'River');
+                } else if (geoFilter === 'mountain') {
+                    filtered = filtered.filter(p => p.type === 'Mountain');
+                } else if (geoFilter === 'plains') {
+                    filtered = filtered.filter(p => p.type === 'Plains');
+                } else if (geoFilter === 'deserts') {
+                    filtered = filtered.filter(p => p.type === 'Desert');
+                }
             }
         }
 
@@ -159,20 +165,37 @@ export default function Quiz() {
                     <div className="animate-in slide-in-from-bottom-4 duration-500">
                         {/* Geography Dropdown */}
                         <div className="max-w-xs mx-auto mb-8">
-                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Filter by Terrain</label>
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">
+                                {selectedCategory === 'world' ? 'Filter by Continent' : 'Filter by Terrain'}
+                            </label>
                             <div className="relative">
                                 <select
                                     value={geoFilter}
                                     onChange={(e) => setGeoFilter(e.target.value)}
                                     className="w-full px-6 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 transition-all font-bold text-slate-800 appearance-none shadow-sm cursor-pointer"
                                 >
-                                    <option value="all">All Terrains</option>
-                                    <option value="mountain">Mountains</option>
-                                    <option value="water bodies">Water Bodies (All)</option>
-                                    <option value="plains">Plains</option>
-                                    <option value="deserts">Deserts</option>
-                                    <option value="lakes only">Lakes Only</option>
-                                    <option value="rivers only">Rivers Only</option>
+                                    {selectedCategory === 'world' ? (
+                                        <>
+                                            <option value="all">All Continents</option>
+                                            <option value="Australia">Australia</option>
+                                            <option value="Asia">Asia</option>
+                                            <option value="New Zealand">New Zealand</option>
+                                            <option value="Africa">Africa</option>
+                                            <option value="Europe">Europe</option>
+                                            <option value="North America">North America</option>
+                                            <option value="South America">South America</option>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <option value="all">All Terrains</option>
+                                            <option value="mountain">Mountains</option>
+                                            <option value="water bodies">Water Bodies (All)</option>
+                                            <option value="plains">Plains</option>
+                                            <option value="deserts">Deserts</option>
+                                            <option value="lakes only">Lakes Only</option>
+                                            <option value="rivers only">Rivers Only</option>
+                                        </>
+                                    )}
                                 </select>
                                 <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
                                     <Globe size={18} />

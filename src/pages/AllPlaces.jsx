@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Tag, Globe, Search, List, Edit2, Trash2, Star } from 'lucide-react';
+import { ArrowLeft, MapPin, Tag, Globe, Search, List, Star } from 'lucide-react';
 import { PLACES_DATA } from '../data/places';
 
 export default function AllPlaces() {
@@ -8,7 +8,6 @@ export default function AllPlaces() {
     const [places, setPlaces] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterCategory, setFilterCategory] = useState('all');
-    const [editingPlace, setEditingPlace] = useState(null); // For edit modal
 
     useEffect(() => {
         const saved = JSON.parse(localStorage.getItem('myPlaces') || '[]');
@@ -40,23 +39,6 @@ export default function AllPlaces() {
         savePlaces(updated);
     };
 
-    const deletePlace = (id) => {
-        if (confirm('Are you sure you want to delete this place?')) {
-            const updated = places.filter(p => p.id !== id);
-            savePlaces(updated);
-        }
-    };
-
-    const startEditing = (place) => {
-        setEditingPlace({ ...place });
-    };
-
-    const saveEdit = (e) => {
-        e.preventDefault();
-        const updated = places.map(p => p.id === editingPlace.id ? editingPlace : p);
-        savePlaces(updated);
-        setEditingPlace(null);
-    };
 
     const filteredPlaces = places.filter(place => {
         const matchesSearch =
@@ -195,21 +177,6 @@ export default function AllPlaces() {
                                         >
                                             <Star size={18} fill={place.isBookmarked ? "currentColor" : "none"} />
                                         </button>
-                                        <div className="w-[1px] h-4 bg-slate-200 mx-1"></div>
-                                        <button
-                                            onClick={() => startEditing(place)}
-                                            className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-white rounded-lg transition-all"
-                                            title="Edit"
-                                        >
-                                            <Edit2 size={18} />
-                                        </button>
-                                        <button
-                                            onClick={() => deletePlace(place.id)}
-                                            className="p-2 text-slate-400 hover:text-red-500 hover:bg-white rounded-lg transition-all"
-                                            title="Delete"
-                                        >
-                                            <Trash2 size={18} />
-                                        </button>
                                     </div>
                                     <div className="hidden lg:block text-right min-w-[60px]">
                                         <p className="text-[10px] font-black text-slate-300 uppercase leading-none">ID</p>
@@ -221,83 +188,6 @@ export default function AllPlaces() {
                     </div>
                 )}
             </div>
-
-            {/* Edit Modal */}
-            {editingPlace && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-                    <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setEditingPlace(null)}></div>
-                    <form
-                        onSubmit={saveEdit}
-                        className="relative bg-white rounded-[2.5rem] shadow-2xl p-10 w-full max-w-md animate-in zoom-in-95 duration-200"
-                    >
-                        <h2 className="text-3xl font-black text-slate-900 mb-8 tracking-tight">
-                            Edit <span className="text-indigo-600">Place</span>
-                        </h2>
-
-                        <div className="space-y-6">
-                            <div>
-                                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Landmark Name</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={editingPlace.name}
-                                    onChange={(e) => setEditingPlace({ ...editingPlace, name: e.target.value })}
-                                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 transition-all font-bold text-slate-800"
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Type</label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={editingPlace.type}
-                                        onChange={(e) => setEditingPlace({ ...editingPlace, type: e.target.value })}
-                                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 transition-all font-bold text-slate-800"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Subtype</label>
-                                    <input
-                                        type="text"
-                                        value={editingPlace.subtype || ''}
-                                        onChange={(e) => setEditingPlace({ ...editingPlace, subtype: e.target.value })}
-                                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 transition-all font-bold text-slate-800"
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Location</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={editingPlace.place}
-                                    onChange={(e) => setEditingPlace({ ...editingPlace, place: e.target.value })}
-                                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 transition-all font-bold text-slate-800"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex gap-4 mt-10">
-                            <button
-                                type="button"
-                                onClick={() => setEditingPlace(null)}
-                                className="flex-1 py-4 bg-slate-100 text-slate-600 rounded-2xl font-black hover:bg-slate-200 transition-all"
-                            >
-                                CANCEL
-                            </button>
-                            <button
-                                type="submit"
-                                className="flex-1 py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-1 transition-all"
-                            >
-                                SAVE CHANGES
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            )}
         </div>
     );
 }
