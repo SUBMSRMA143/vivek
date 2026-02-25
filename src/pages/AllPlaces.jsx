@@ -52,9 +52,11 @@ export default function AllPlaces() {
     });
 
     const categories = [
-        { id: 'all', label: 'All Collection', icon: <List size={16} /> },
+        { id: 'all', label: 'All', icon: <List size={16} /> },
         { id: 'india', label: 'India', icon: <span>🇮🇳</span> },
-        { id: 'world', label: 'All World', icon: <Globe size={16} /> }
+        { id: 'world', label: 'World', icon: <Globe size={16} /> },
+        { id: 'special-1', label: 'Sp-1', icon: <span>🌟</span> },
+        { id: 'special-2', label: 'Sp-2', icon: <span>✨</span> }
     ];
 
     return (

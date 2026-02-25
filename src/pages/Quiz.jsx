@@ -12,7 +12,9 @@ export default function Quiz() {
     const [quizCategory, setQuizCategory] = useState('all'); // all, india, world
     const [geoFilter, setGeoFilter] = useState('all'); // all, mountain, water, plains, deserts, lakes, rivers
     const [selectedCategory, setSelectedCategory] = useState(null); // For two-step selection
-    const [userResults, setUserResults] = useState([]); // Store { name, status: 'known' | 'unknown' }
+    const [userResults, setUserResults] = useState([]);
+    const [showingResult, setShowingResult] = useState(false);
+    const [lastAnswerCorrect, setLastAnswerCorrect] = useState(null); // Store { name, status: 'known' | 'unknown' }
     const [localPlaces, setLocalPlaces] = useState([]);
 
     // Hints state for current question
@@ -131,6 +133,11 @@ export default function Quiz() {
     const handleRevealLocation = () => setHints(prev => ({ ...prev, location: true }));
 
     const handleResult = (isKnown) => {
+        // Reveal all hints immediately
+        setHints({ type: true, subtype: true, location: true });
+        setShowingResult(true);
+        setLastAnswerCorrect(isKnown);
+
         // Store result
         const result = {
             name: currentPlace.name,
@@ -139,6 +146,11 @@ export default function Quiz() {
         };
 
         setUserResults(prev => [...prev, result]);
+    };
+
+    const handleNextQuestion = () => {
+        setShowingResult(false);
+        setLastAnswerCorrect(null);
 
         if (currentQuestionIndex < questionPlaces.length - 1) {
             setCurrentQuestionIndex(prev => prev + 1);
@@ -367,20 +379,32 @@ export default function Quiz() {
                         />
                     </div>
 
-                    {/* Action Buttons */}
+                    {/* Control Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                        <button
-                            onClick={() => handleResult(false)}
-                            className="flex-1 py-4 bg-slate-100 text-slate-600 rounded-2xl font-black hover:bg-slate-200 transition-all flex items-center justify-center gap-2 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 text-sm"
-                        >
-                            <HelpCircle size={20} /> I DON'T KNOW
-                        </button>
-                        <button
-                            onClick={() => handleResult(true)}
-                            className="flex-1 py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 border-b-4 border-indigo-800 active:border-b-0 active:translate-y-1 text-sm"
-                        >
-                            <CheckCircle2 size={20} /> I KNOW THIS
-                        </button>
+                        {!showingResult ? (
+                            <>
+                                <button
+                                    onClick={() => handleResult(false)}
+                                    className="flex-1 py-4 bg-slate-100 text-slate-600 rounded-2xl font-black hover:bg-slate-200 transition-all flex items-center justify-center gap-2 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 text-sm"
+                                >
+                                    <HelpCircle size={20} /> I DON'T KNOW
+                                </button>
+                                <button
+                                    onClick={() => handleResult(true)}
+                                    className="flex-1 py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 border-b-4 border-indigo-800 active:border-b-0 active:translate-y-1 text-sm"
+                                >
+                                    <CheckCircle2 size={20} /> I KNOW THIS
+                                </button>
+                            </>
+                        ) : (
+                            <button
+                                onClick={handleNextQuestion}
+                                className={`w-full py-4 text-white rounded-2xl font-black shadow-xl transition-all flex items-center justify-center gap-2 border-b-4 active:border-b-0 active:translate-y-1 ${lastAnswerCorrect ? 'bg-green-600 border-green-800 hover:bg-green-700 shadow-green-100' : 'bg-orange-600 border-orange-800 hover:bg-orange-700 shadow-orange-100'
+                                    }`}
+                            >
+                                NEXT QUESTION <PlayCircle size={20} />
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
