@@ -1,13 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, MapPin, Tag, Globe, Search, List, Star } from 'lucide-react';
 import { PLACES_DATA } from '../data/places';
 
 export default function AllPlaces() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const [places, setPlaces] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [filterCategory, setFilterCategory] = useState('all');
+    const [filterCategory, setFilterCategory] = useState(searchParams.get('category') || 'all');
+
+    useEffect(() => {
+        const categoryFromUrl = searchParams.get('category');
+        if (categoryFromUrl) {
+            setFilterCategory(categoryFromUrl);
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         const saved = JSON.parse(localStorage.getItem('myPlaces') || '[]');
