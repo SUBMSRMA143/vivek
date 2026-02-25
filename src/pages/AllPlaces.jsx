@@ -61,8 +61,8 @@ export default function AllPlaces() {
         <div className="min-h-screen bg-slate-50 relative">
             <div className="absolute top-0 right-0 w-1/2 h-96 bg-blue-100/50 rounded-bl-[10rem] -z-0"></div>
 
-            <div className="relative z-10 container mx-auto px-6 py-12">
-                <header className="mb-12">
+            <div className="relative z-10 container mx-auto px-6 py-8">
+                <header className="mb-8">
                     <button
                         onClick={() => navigate('/')}
                         className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors mb-6 group"
@@ -75,10 +75,10 @@ export default function AllPlaces() {
 
                     <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
                         <div>
-                            <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+                            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mb-2">
                                 My <span className="text-indigo-600">Collection</span>
                             </h1>
-                            <p className="text-slate-500 font-medium">
+                            <p className="text-xs text-slate-500 font-medium">
                                 Exploring <strong className="text-indigo-600">{filteredPlaces.length}</strong> unique places in this view.
                             </p>
                         </div>
@@ -90,7 +90,7 @@ export default function AllPlaces() {
                                     <button
                                         key={cat.id}
                                         onClick={() => setFilterCategory(cat.id)}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${filterCategory === cat.id
+                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${filterCategory === cat.id
                                             ? 'bg-indigo-600 text-white shadow-md'
                                             : 'text-slate-500 hover:bg-slate-50'
                                             }`}
@@ -107,7 +107,7 @@ export default function AllPlaces() {
                                     placeholder="Search the world..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition-all shadow-sm font-medium"
+                                    className="w-full pl-10 pr-4 py-1.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition-all shadow-sm font-medium text-sm"
                                 />
                             </div>
                         </div>
@@ -131,12 +131,12 @@ export default function AllPlaces() {
                         {filteredPlaces.map((place, index) => (
                             <div
                                 key={index}
-                                className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 group flex flex-col md:flex-row md:items-center justify-between gap-6 animate-in slide-in-from-bottom-2 duration-500"
+                                className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 group flex flex-col md:flex-row md:items-center justify-between gap-4 animate-in slide-in-from-bottom-2 duration-500"
                             >
                                 {/* Left: Info */}
                                 <div className="flex-1 min-w-[200px]">
                                     <div className="flex items-center gap-3 mb-1">
-                                        <h3 className="text-xl font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">
+                                        <h3 className="text-lg font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">
                                             {place.name}
                                         </h3>
                                         <div className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter ${place.category === 'india'
@@ -147,8 +147,8 @@ export default function AllPlaces() {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-1.5 text-slate-400">
-                                        <MapPin size={14} />
-                                        <span className="text-xs font-semibold">{place.place}</span>
+                                        <MapPin size={12} />
+                                        <span className="text-[10px] font-semibold">{place.place}</span>
                                     </div>
                                 </div>
 
@@ -175,7 +175,7 @@ export default function AllPlaces() {
                                                 }`}
                                             title={place.isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
                                         >
-                                            <Star size={18} fill={place.isBookmarked ? "currentColor" : "none"} />
+                                            <Star size={16} fill={place.isBookmarked ? "currentColor" : "none"} />
                                         </button>
                                     </div>
                                     <div className="hidden lg:block text-right min-w-[60px]">

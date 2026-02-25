@@ -82,7 +82,16 @@ export default function Quiz() {
 
         // Shuffle all places in the category
         const shuffled = [...filtered].sort(() => 0.5 - Math.random());
-        setQuestionPlaces(shuffled);
+
+        // Limit question count based on category
+        let finalQuestions = shuffled;
+        if (category === 'world') {
+            finalQuestions = shuffled.slice(0, 30);
+        } else if (category === 'all') {
+            finalQuestions = shuffled.slice(0, 50);
+        }
+
+        setQuestionPlaces(finalQuestions);
 
         setQuizState('playing');
         setCurrentQuestionIndex(0);
@@ -151,13 +160,13 @@ export default function Quiz() {
             <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-orange-100/30 rounded-tr-full -z-0"></div>
 
             <div className="relative z-10 text-center max-w-2xl animate-in zoom-in duration-700">
-                <div className="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-indigo-200 rotate-3">
-                    <Award size={40} className="text-white" />
+                <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-200 rotate-3">
+                    <Award size={32} className="text-white" />
                 </div>
-                <h1 className="text-5xl font-black text-slate-900 mb-6 tracking-tight">
+                <h1 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">
                     Place <span className="text-indigo-600">Flashcards</span>
                 </h1>
-                <p className="text-lg text-slate-600 mb-10 font-medium leading-relaxed">
+                <p className="text-sm text-slate-600 mb-8 font-medium leading-relaxed">
                     Test your knowledge! {selectedCategory ? `Customize your ${selectedCategory} review.` : 'Pick a region to start your review.'}
                 </p>
 
@@ -172,7 +181,7 @@ export default function Quiz() {
                                 <select
                                     value={geoFilter}
                                     onChange={(e) => setGeoFilter(e.target.value)}
-                                    className="w-full px-6 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 transition-all font-bold text-slate-800 appearance-none shadow-sm cursor-pointer"
+                                    className="w-full px-4 py-3 bg-white border-2 border-slate-100 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-50 focus:border-indigo-200 transition-all font-bold text-slate-800 appearance-none shadow-sm cursor-pointer text-sm"
                                 >
                                     {selectedCategory === 'world' ? (
                                         <>
@@ -206,9 +215,9 @@ export default function Quiz() {
                         <div className="flex flex-col gap-4 mb-12 max-w-xs mx-auto">
                             <button
                                 onClick={() => startQuiz(selectedCategory)}
-                                className="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-1 transition-all flex items-center justify-center gap-3 uppercase tracking-wider"
+                                className="w-full py-4 bg-indigo-600 text-white rounded-xl font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 uppercase tracking-wider text-sm"
                             >
-                                <PlayCircle size={24} /> Start {selectedCategory} Quiz
+                                <PlayCircle size={20} /> Start {selectedCategory} Quiz
                             </button>
                             <button
                                 onClick={() => setSelectedCategory(null)}
@@ -258,7 +267,7 @@ export default function Quiz() {
                             accent="orange"
                         />
                         <QuizCategoryCard
-                            title="Mixed"
+                            title="Mixer"
                             icon="🎭"
                             count={localPlaces.length}
                             onClick={() => handleCategoryClick('all')}
@@ -280,20 +289,20 @@ export default function Quiz() {
     if (quizState === 'playing') return (
         <main className="min-h-screen bg-slate-50 flex flex-col items-center py-12 px-6">
             {/* Progress HUD */}
-            <header className="w-full max-w-2xl mb-12 flex items-center justify-between bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50">
+            <header className="w-full max-w-2xl mb-8 flex items-center justify-between bg-white p-4 rounded-[1.5rem] border border-slate-100 shadow-xl shadow-slate-200/50">
                 <button
                     onClick={() => {
                         setQuizState('intro');
                         setSelectedCategory(null);
                     }}
-                    className="p-3 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all"
+                    className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
                 >
-                    <ArrowLeft size={24} />
+                    <ArrowLeft size={20} />
                 </button>
 
                 <div className="flex flex-col items-center">
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Progress</span>
-                    <div className="flex items-center gap-1.5 font-black text-slate-900 text-xl">
+                    <div className="flex items-center gap-1 font-black text-slate-900 text-lg">
                         <span className="text-indigo-600">{currentQuestionIndex + 1}</span>
                         <span className="text-slate-300">/</span>
                         <span>{questionPlaces.length}</span>
@@ -310,14 +319,14 @@ export default function Quiz() {
                     >
                         <Star size={24} fill={currentPlace.isBookmarked ? "currentColor" : "none"} />
                     </button>
-                    <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center font-black text-indigo-600">
+                    <div className="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center font-black text-indigo-600 text-xs">
                         ID:{currentPlace.id}
                     </div>
                 </div>
             </header>
 
             {/* Main Question Card */}
-            <div className="w-full max-w-2xl bg-white rounded-[3.5rem] shadow-2xl shadow-slate-200/60 p-12 border border-slate-50 relative overflow-hidden animate-in zoom-in-95 duration-500">
+            <div className="w-full max-w-2xl bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/60 p-8 border border-slate-50 relative overflow-hidden animate-in zoom-in-95 duration-500">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-[4rem] -z-0 opacity-50"></div>
 
                 <div className="relative z-10 text-center">
@@ -325,16 +334,16 @@ export default function Quiz() {
                         <span className="px-4 py-1.5 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-black uppercase tracking-widest mb-6 inline-block border border-indigo-100/50">
                             Identify the place
                         </span>
-                        <h2 className="text-5xl font-black text-slate-900 tracking-tight leading-tight">
+                        <h2 className="text-3xl font-black text-slate-900 tracking-tight leading-tight">
                             {currentPlace.name}
                         </h2>
                     </div>
 
                     {/* Sequential Hints */}
-                    <div className="space-y-4 mb-12">
+                    <div className="space-y-3 mb-8">
                         <HintButton
                             label="Type"
-                            icon={<Tag size={18} />}
+                            icon={<Tag size={16} />}
                             content={currentPlace.type}
                             isRevealed={hints.type}
                             onClick={handleRevealType}
@@ -342,7 +351,7 @@ export default function Quiz() {
                         />
                         <HintButton
                             label="Sub-category"
-                            icon={<Globe size={18} />}
+                            icon={<Globe size={16} />}
                             content={currentPlace.subtype}
                             isRevealed={hints.subtype}
                             onClick={handleRevealSubtype}
@@ -350,7 +359,7 @@ export default function Quiz() {
                         />
                         <HintButton
                             label="Exact Location"
-                            icon={<MapPin size={18} />}
+                            icon={<MapPin size={16} />}
                             content={currentPlace.place}
                             isRevealed={hints.location}
                             onClick={handleRevealLocation}
@@ -362,15 +371,15 @@ export default function Quiz() {
                     <div className="flex flex-col sm:flex-row gap-4 pt-4">
                         <button
                             onClick={() => handleResult(false)}
-                            className="flex-1 py-5 bg-slate-100 text-slate-600 rounded-[2rem] font-black hover:bg-slate-200 transition-all flex items-center justify-center gap-3 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1"
+                            className="flex-1 py-4 bg-slate-100 text-slate-600 rounded-2xl font-black hover:bg-slate-200 transition-all flex items-center justify-center gap-2 border-b-4 border-slate-200 active:border-b-0 active:translate-y-1 text-sm"
                         >
-                            <HelpCircle size={24} /> I DON'T KNOW
+                            <HelpCircle size={20} /> I DON'T KNOW
                         </button>
                         <button
                             onClick={() => handleResult(true)}
-                            className="flex-1 py-5 bg-indigo-600 text-white rounded-[2rem] font-black shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 border-b-4 border-indigo-800 active:border-b-0 active:translate-y-1"
+                            className="flex-1 py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 border-b-4 border-indigo-800 active:border-b-0 active:translate-y-1 text-sm"
                         >
-                            <CheckCircle2 size={24} /> I KNOW THIS
+                            <CheckCircle2 size={20} /> I KNOW THIS
                         </button>
                     </div>
                 </div>
@@ -383,24 +392,24 @@ export default function Quiz() {
             <div className="w-full max-w-4xl bg-white rounded-[3.5rem] shadow-2xl p-12 text-center border border-slate-50 relative overflow-hidden animate-in slide-in-from-bottom-6 duration-700">
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-orange-400 via-indigo-500 to-purple-600"></div>
 
-                <div className="w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-8 text-indigo-600 border-4 border-white shadow-lg">
-                    <Award size={48} />
+                <div className="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-600 border-4 border-white shadow-lg">
+                    <Award size={32} />
                 </div>
 
-                <h1 className="text-5xl font-black text-slate-900 mb-4">Review Complete!</h1>
-                <p className="text-slate-500 mb-12 font-medium bg-slate-50 py-3 px-6 rounded-2xl inline-block border border-slate-100">
+                <h1 className="text-3xl font-black text-slate-900 mb-2">Review Complete!</h1>
+                <p className="text-slate-500 mb-8 font-medium bg-slate-50 py-2 px-4 rounded-xl inline-block border border-slate-100 text-xs">
                     Category: <strong className="capitalize text-indigo-600">{quizCategory}</strong> collection
                 </p>
 
                 {/* Summary Cards */}
-                <div className="grid grid-cols-2 gap-6 mb-12">
-                    <div className="bg-green-50 p-6 rounded-3xl border border-green-100">
-                        <p className="text-[10px] font-black text-green-600 uppercase tracking-widest mb-1">Knowledge Mastered</p>
-                        <p className="text-5xl font-black text-green-700">{userResults.filter(r => r.status === 'known').length}</p>
+                <div className="grid grid-cols-2 gap-4 mb-8">
+                    <div className="bg-green-50 p-4 rounded-2xl border border-green-100">
+                        <p className="text-[9px] font-black text-green-600 uppercase tracking-widest mb-1">Knowledge Mastered</p>
+                        <p className="text-3xl font-black text-green-700">{userResults.filter(r => r.status === 'known').length}</p>
                     </div>
-                    <div className="bg-orange-50 p-6 rounded-3xl border border-orange-100">
-                        <p className="text-[10px] font-black text-orange-600 uppercase tracking-widest mb-1">Needs Refreshing</p>
-                        <p className="text-5xl font-black text-orange-700">{userResults.filter(r => r.status === 'unknown').length}</p>
+                    <div className="bg-orange-50 p-4 rounded-2xl border border-orange-100">
+                        <p className="text-[9px] font-black text-orange-600 uppercase tracking-widest mb-1">Needs Refreshing</p>
+                        <p className="text-3xl font-black text-orange-700">{userResults.filter(r => r.status === 'unknown').length}</p>
                     </div>
                 </div>
 
@@ -439,13 +448,13 @@ export default function Quiz() {
                             setQuizState('intro');
                             setSelectedCategory(null);
                         }}
-                        className="flex-1 py-5 bg-slate-100 text-slate-600 rounded-2xl font-black hover:bg-slate-200 transition-all flex items-center justify-center gap-3"
+                        className="flex-1 py-4 bg-slate-100 text-slate-600 rounded-xl font-black hover:bg-slate-200 transition-all flex items-center justify-center gap-2 text-sm"
                     >
-                        <ArrowLeft size={20} /> TRY ANOTHER REGION
+                        <ArrowLeft size={16} /> TRY ANOTHER REGION
                     </button>
                     <button
                         onClick={() => navigate('/all-places')}
-                        className="flex-1 py-5 bg-indigo-600 text-white rounded-2xl font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-1 transition-all"
+                        className="flex-1 py-4 bg-indigo-600 text-white rounded-xl font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-1 transition-all text-sm"
                     >
                         BACK TO COLLECTION
                     </button>
@@ -469,11 +478,11 @@ function QuizCategoryCard({ title, icon, count, onClick, accent }) {
     return (
         <button
             onClick={onClick}
-            className={`p-6 rounded-3xl border-2 border-white shadow-sm transition-all flex flex-col items-center gap-2 group ${accents[accent]} bg-white`}
+            className={`p-4 rounded-2xl border-2 border-white shadow-sm transition-all flex flex-col items-center gap-1 group ${accents[accent]} bg-white`}
         >
-            <span className="text-3xl mb-1 group-hover:scale-125 transition-transform duration-500">{icon}</span>
-            <span className="font-black text-slate-900 tracking-tight">{title}</span>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{count} items</span>
+            <span className="text-2xl mb-1 group-hover:scale-110 transition-transform duration-500">{icon}</span>
+            <span className="font-black text-slate-900 tracking-tight text-sm">{title}</span>
+            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{count} items</span>
         </button>
     );
 }
@@ -489,7 +498,7 @@ function HintButton({ label, icon, content, isRevealed, onClick, accent }) {
         <button
             onClick={onClick}
             disabled={isRevealed}
-            className={`w-full p-5 rounded-2xl border-2 transition-all flex items-center justify-between group/hint ${isRevealed
+            className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between group/hint ${isRevealed
                 ? accents[accent]
                 : 'bg-white border-slate-100 hover:border-slate-200 text-slate-400'
                 }`}

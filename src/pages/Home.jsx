@@ -11,15 +11,15 @@ export default function Home() {
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] z-0"></div>
 
             <div className="relative z-10 container mx-auto px-6 py-20 flex flex-col items-center justify-center text-center">
-                <header className="mb-16 animate-in slide-in-from-top-10 duration-700 fade-in flex flex-col items-center">
-                    <div className="inline-flex items-center justify-center p-3 bg-indigo-50 rounded-full mb-6 border border-indigo-100 shadow-sm">
-                        <MapPin className="text-indigo-600 mr-2" size={20} />
-                        <span className="text-indigo-600 font-bold text-xs tracking-widest uppercase">Personal Learning Atlas</span>
+                <header className="mb-10 animate-in slide-in-from-top-10 duration-700 fade-in flex flex-col items-center">
+                    <div className="inline-flex items-center justify-center p-2 bg-indigo-50 rounded-full mb-4 border border-indigo-100 shadow-sm">
+                        <MapPin className="text-indigo-600 mr-2" size={16} />
+                        <span className="text-indigo-600 font-bold text-[10px] tracking-widest uppercase">Personal Learning Atlas</span>
                     </div>
-                    <h1 className="text-6xl md:text-7xl font-black text-slate-900 mb-6 tracking-tight">
+                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
                         Place <span className="text-indigo-600">Learner</span>
                     </h1>
-                    <p className="text-xl text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
+                    <p className="text-lg text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
                         Track your journey, quiz your knowledge, and build your personal map of the world.
                     </p>
                 </header>
@@ -28,7 +28,7 @@ export default function Home() {
                     <MenuCard
                         title="All Places"
                         description="Browse the full collection."
-                        icon={<Globe size={32} />}
+                        icon={<Globe size={24} />}
                         onClick={() => navigate('/all-places')}
                         colorClass="text-indigo-600 bg-indigo-50"
                         hoverClass="hover:border-indigo-200 hover:shadow-indigo-100"
@@ -37,7 +37,7 @@ export default function Home() {
                     <MenuCard
                         title="Start Quiz"
                         description="Test your knowledge."
-                        icon={<PlayCircle size={32} />}
+                        icon={<PlayCircle size={24} />}
                         onClick={() => navigate('/quiz')}
                         colorClass="text-emerald-600 bg-emerald-50"
                         hoverClass="hover:border-emerald-200 hover:shadow-emerald-100"
@@ -46,7 +46,7 @@ export default function Home() {
                     <MenuCard
                         title="Bookmarks"
                         description="View your favorites."
-                        icon={<Bookmark size={32} />}
+                        icon={<Bookmark size={24} />}
                         onClick={() => navigate('/bookmarks')}
                         colorClass="text-purple-600 bg-purple-50"
                         hoverClass="hover:border-purple-200 hover:shadow-purple-100"
@@ -54,8 +54,8 @@ export default function Home() {
                     />
                 </div>
 
-                <div className="mt-16 w-full max-w-5xl animate-in slide-in-from-bottom-10 duration-700 delay-300">
-                    <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-8">Specialized Curations</h2>
+                <div className="mt-12 w-full max-w-5xl animate-in slide-in-from-bottom-10 duration-700 delay-300">
+                    <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Specialized Curations</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <button
                             onClick={() => navigate('/all-places?category=special-1')}
@@ -84,7 +84,7 @@ export default function Home() {
                     </div>
                 </div>
 
-                <footer className="mt-20 text-center text-slate-400 text-sm animate-in fade-in duration-1000 delay-500">
+                <footer className="mt-12 text-center text-slate-400 text-sm animate-in fade-in duration-1000 delay-500">
                     <p className="font-medium tracking-wide">© 2026 Place Learner • Keep exploring</p>
                 </footer>
             </div>
@@ -96,13 +96,13 @@ function MenuCard({ title, description, icon, onClick, colorClass, hoverClass, d
     return (
         <button
             onClick={onClick}
-            className={`bg-white p-8 rounded-3xl shadow-lg border border-transparent text-center flex flex-col items-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl group ${hoverClass} animate-in slide-in-from-bottom-8 fade-in duration-500 ${delay}`}
+            className={`bg-white p-6 rounded-2xl shadow-lg border border-transparent text-center flex flex-col items-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl group ${hoverClass} animate-in slide-in-from-bottom-8 fade-in duration-500 ${delay}`}
         >
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors ${colorClass}`}>
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-colors ${colorClass}`}>
                 {icon}
             </div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-3 group-hover:text-indigo-600 transition-colors">{title}</h3>
-            <p className="text-slate-500 leading-relaxed text-sm">{description}</p>
+            <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors">{title}</h3>
+            <p className="text-slate-500 leading-relaxed text-xs">{description}</p>
         </button>
     );
 }
