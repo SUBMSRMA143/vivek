@@ -68,18 +68,6 @@ export default function Quiz() {
                     filtered = filtered.filter(p => p.type === 'Minerals');
                 } else if (geoFilter === 'dams') {
                     filtered = filtered.filter(p => p.type === 'Dams');
-                } else if (geoFilter === 'mountain') {
-                    filtered = filtered.filter(p => p.type === 'Mountain');
-                } else if (geoFilter === 'water bodies') {
-                    filtered = filtered.filter(p => p.type === 'Water Body');
-                } else if (geoFilter === 'plains') {
-                    filtered = filtered.filter(p => p.type === 'Plains');
-                } else if (geoFilter === 'deserts') {
-                    filtered = filtered.filter(p => p.type === 'Desert');
-                } else if (geoFilter === 'lakes only') {
-                    filtered = filtered.filter(p => p.subtype === 'Lake');
-                } else if (geoFilter === 'rivers only') {
-                    filtered = filtered.filter(p => p.subtype === 'River');
                 }
             }
         }
@@ -215,16 +203,10 @@ export default function Quiz() {
                                         </>
                                     ) : (
                                         <>
-                                            <option value="all">All Terrains</option>
+                                            <option value="all">All Items</option>
                                             <option value="mountain pass">Mountain Pass</option>
                                             <option value="minerals">Minerals</option>
                                             <option value="dams">Dams</option>
-                                            <option value="mountain">Mountains</option>
-                                            <option value="water bodies">Water Bodies (All)</option>
-                                            <option value="plains">Plains</option>
-                                            <option value="deserts">Deserts</option>
-                                            <option value="lakes only">Lakes Only</option>
-                                            <option value="rivers only">Rivers Only</option>
                                         </>
                                     )}
                                 </select>
