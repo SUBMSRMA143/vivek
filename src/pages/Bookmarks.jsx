@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Star, MapPin } from 'lucide-react';
+import { PLACES_DATA } from '../data/places';
 
 export default function Bookmarks() {
     const navigate = useNavigate();
@@ -8,7 +9,19 @@ export default function Bookmarks() {
 
     useEffect(() => {
         const saved = JSON.parse(localStorage.getItem('myPlaces') || '[]');
-        setBookmarks(saved.filter(p => p.isBookmarked));
+        const staticIds = new Set(PLACES_DATA.map(p => p.id));
+
+        // Purge stale items from categories managed by the system (india, world, special-1, special-2)
+        const syncedData = saved.filter(p =>
+            staticIds.has(p.id) ||
+            (!['india', 'world', 'special-1', 'special-2'].includes(p.category))
+        );
+
+        if (syncedData.length !== saved.length) {
+            localStorage.setItem('myPlaces', JSON.stringify(syncedData));
+        }
+
+        setBookmarks(syncedData.filter(p => p.isBookmarked));
     }, []);
 
     const removeBookmark = (id) => {

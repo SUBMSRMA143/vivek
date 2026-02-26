@@ -30,7 +30,7 @@ export default function AllPlaces() {
         });
 
         const staticIds = new Set(PLACES_DATA.map(p => p.id));
-        const customPlaces = saved.filter(p => !staticIds.has(p.id));
+        const customPlaces = saved.filter(p => !staticIds.has(p.id) && !['india', 'world', 'special-1', 'special-2'].includes(p.category));
         const finalData = [...syncedData, ...customPlaces];
 
         setPlaces(finalData);

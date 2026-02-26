@@ -32,10 +32,11 @@ export default function Quiz() {
             };
         });
 
-        // Also preserve any custom places that might have been added but aren't in PLACES_DATA
-        // (though current UI doesn't allow adding, this makes it robust)
+        // Purge stale items from categories managed by the system (india, world, special-1, special-2)
+        // only keep custom user-added places (if any)
         const staticIds = new Set(PLACES_DATA.map(p => p.id));
-        const customPlaces = saved.filter(p => !staticIds.has(p.id));
+        const customPlaces = saved.filter(p => !staticIds.has(p.id) && !['india', 'world', 'special-1', 'special-2'].includes(p.category));
+
         const finalData = [...syncedData, ...customPlaces];
 
         setLocalPlaces(finalData);
@@ -61,18 +62,24 @@ export default function Quiz() {
                 filtered = filtered.filter(p => p.place === geoFilter);
             } else {
                 // For other categories (like India), use the terrain filters
-                if (geoFilter === 'water bodies') {
-                    filtered = filtered.filter(p => p.type === 'Water Body');
-                } else if (geoFilter === 'lakes only') {
-                    filtered = filtered.filter(p => p.subtype === 'Lake');
-                } else if (geoFilter === 'rivers only') {
-                    filtered = filtered.filter(p => p.subtype === 'River');
+                if (geoFilter === 'mountain pass') {
+                    filtered = filtered.filter(p => p.type === 'Mountain Pass');
+                } else if (geoFilter === 'minerals') {
+                    filtered = filtered.filter(p => p.type === 'Minerals');
+                } else if (geoFilter === 'dams') {
+                    filtered = filtered.filter(p => p.type === 'Dams');
                 } else if (geoFilter === 'mountain') {
                     filtered = filtered.filter(p => p.type === 'Mountain');
+                } else if (geoFilter === 'water bodies') {
+                    filtered = filtered.filter(p => p.type === 'Water Body');
                 } else if (geoFilter === 'plains') {
                     filtered = filtered.filter(p => p.type === 'Plains');
                 } else if (geoFilter === 'deserts') {
                     filtered = filtered.filter(p => p.type === 'Desert');
+                } else if (geoFilter === 'lakes only') {
+                    filtered = filtered.filter(p => p.subtype === 'Lake');
+                } else if (geoFilter === 'rivers only') {
+                    filtered = filtered.filter(p => p.subtype === 'River');
                 }
             }
         }
@@ -209,6 +216,9 @@ export default function Quiz() {
                                     ) : (
                                         <>
                                             <option value="all">All Terrains</option>
+                                            <option value="mountain pass">Mountain Pass</option>
+                                            <option value="minerals">Minerals</option>
+                                            <option value="dams">Dams</option>
                                             <option value="mountain">Mountains</option>
                                             <option value="water bodies">Water Bodies (All)</option>
                                             <option value="plains">Plains</option>
