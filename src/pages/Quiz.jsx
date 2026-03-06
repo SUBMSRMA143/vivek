@@ -83,7 +83,7 @@ export default function Quiz() {
         // Limit question count based on category
         let finalQuestions = shuffled;
         if (category === 'world') {
-            finalQuestions = shuffled.slice(0, 30);
+            finalQuestions = shuffled.slice(0, 50);
         } else if (category === 'all') {
             finalQuestions = shuffled.slice(0, 50);
         }
