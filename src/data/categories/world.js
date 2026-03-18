@@ -1,5 +1,8 @@
 export const worldPlaces = [
     { id: 8, name: "Gulf of Guayaquil", type: "Water Body", subtype: "gulf", place: "South America", category: "world" },
+    { id: 1001, name: "Granda bay", type: "Water Body", subtype: "gulf", place: "South America", category: "world" },
+    { id: 1002, name: "Selvas", type: "Plain", subtype: "Plain", place: "South America", category: "world" },
+    { id: 1003, name: "Cerrados", type: "Plain", subtype: "Plain", place: "South America", category: "world" },
     { id: 9, name: "Gulf of Panama", type: "Water Body", subtype: "gulf", place: "South America", category: "world" },
     { id: 10, name: "Rio de la Plata", type: "Water Body", subtype: "estuary", place: "South America", category: "world" },
     { id: 11, name: "Cape Sao Roque", type: "Water Body", subtype: "cape", place: "South America", category: "world" },
@@ -121,6 +124,8 @@ export const worldPlaces = [
     { id: 127, name: "Drakensberg Mountains", type: "Mountain", subtype: "range", place: "Africa", category: "world" },
     { id: 128, name: "Atlas Mountains", type: "Mountain", subtype: "range", place: "Africa", category: "world" },
     { id: 129, name: "Ahaggar Mountains", type: "Mountain", subtype: "range", place: "Africa", category: "world" },
+    { id: 1006, name: "Veld", type: "Mountain", subtype: "range", place: "Africa", category: "world" },
+    { id: 1007, name: "Loma", type: "Mountain", subtype: "range", place: "Africa", category: "world" },
     { id: 130, name: "Adamawa Highlands", type: "Mountain", subtype: "upland region", place: "Africa", category: "world" },
     { id: 131, name: "Katanga Plateau", type: "Mountain", subtype: "plateau", place: "Africa", category: "world" },
     { id: 132, name: "Bié Plateau", type: "Mountain", subtype: "plateau", place: "Africa", category: "world" },
